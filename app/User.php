@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role_id','file_name', 'is_active', 'photo_id'
+        'name', 'email', 'password', 'role_id', 'file_name', 'is_active', 'photo_id'
     ];
 
     /**
@@ -29,17 +29,42 @@ class User extends Authenticatable
     ];
 
 
-    public function role(){
+    public function role()
+    {
 
         return $this->belongsTo('App\Role');
 
     }
 
 
-    public function photo(){
+    public function photo()
+    {
 
         return $this->belongsTo('App\Photo');
 
     }
+
+    public function setPasswordAttribute($password)
+    {
+
+        if (!empty($password)) {
+
+            $this->attributes['password'] = bcrypt($password);
+
+        }
+    }
+
+    public function isAdmin()
+    {
+
+        if ($this->role->name == 'Administrator' && $this->is_active == 1) {
+
+            return true;
+        } else
+            return false;
+
+
+    }
+
 
 }
