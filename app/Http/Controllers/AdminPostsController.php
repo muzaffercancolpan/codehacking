@@ -8,6 +8,8 @@ use App\Photo;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class AdminPostsController extends Controller
 {
@@ -95,7 +97,11 @@ class AdminPostsController extends Controller
     {
         //
 
-        return view('admin.posts.edit');
+        $post = Post::findOrFail($id);
+
+        $categories = Category::pluck('name', 'id')->all();
+
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -109,6 +115,41 @@ class AdminPostsController extends Controller
     function update(Request $request, $id)
     {
         //
+
+        $post = Post::findOrFail($id);
+
+        $input = $request->all();
+
+
+        if ($file = $request->file('photo_id')) {
+
+            if ($post->photo) {
+
+                $photoId = $post->photo->id;
+                unlink(public_path() . $post->photo->file);
+                $name = time() . $file->getClientOriginalName();
+                $file->move('images', $name);
+
+                $photo = Photo::whereId($photoId)->update(['file' => $name]);
+                $input['photo_id'] = $photoId;
+
+            } else {
+                $name = time() . $file->getClientOriginalName();
+                $file->move('images', $name);
+                $photo = Photo::create(['file' => $name]);
+
+                $input['photo_id'] = $photo->id;
+            }
+
+        }
+
+        $post = Auth::user()->posts()->whereId($id)->first();
+
+        $post->update($input);
+
+        return redirect('admin/posts');
+
+
     }
 
     /**
@@ -121,5 +162,19 @@ class AdminPostsController extends Controller
     function destroy($id)
     {
         //
+        $post = Post::findOrFail($id);
+
+        unlink(public_path(). $post->photo->file);
+
+        $post->delete();
+
+        Session::flash('deleted_post', 'The post has been deleted');
+
+        return redirect('/admin/posts');
+
+
+
+
+
     }
 }
