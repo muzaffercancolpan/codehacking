@@ -24,6 +24,7 @@
     <![endif]-->
 
 
+    @yield('styles')
 
 
 </head>
@@ -44,7 +45,6 @@
             <a class="navbar-brand" href="/">Home</a>
         </div>
         <!-- /.navbar-header -->
-
 
 
         <ul class="nav navbar-top-links navbar-right">
@@ -72,10 +72,6 @@
         </ul>
 
 
-
-
-
-
         {{--<ul class="nav navbar-nav navbar-right">--}}
         {{--@if(auth()->guest())--}}
         {{--@if(!Request::is('auth/login'))--}}
@@ -95,9 +91,6 @@
         {{--</li>--}}
         {{--@endif--}}
         {{--</ul>--}}
-
-
-
 
 
         <div class="navbar-default sidebar" role="navigation">
@@ -169,21 +162,16 @@
                         <a href="#"><i class="fa fa-wrench fa-fw"></i>Media<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="/media">All Media</a>
+                                <a href="{{route('admin.medias.index')}}">All Media</a>
                             </li>
 
                             <li>
-                                <a href="">Upload Media</a>
+                                <a href="{{route('admin.medias.create')}}">Upload Media</a>
                             </li>
 
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-
-
-
-
-
 
 
                     <li>
@@ -229,7 +217,8 @@
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
+                                    class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="#">Second Level Item</a>
@@ -280,9 +269,6 @@
     </nav>
 
 
-
-
-
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
@@ -307,9 +293,6 @@
                 </li>
 
 
-
-
-
             </ul>
 
         </div>
@@ -317,10 +300,6 @@
     </div>
 
 </div>
-
-
-
-
 
 
 <!-- Page Content -->
@@ -347,10 +326,7 @@
 <script src="{{asset('js/libs.js')}}"></script>
 
 
-@yield('footer')
-
-
-
+@yield('scripts')
 
 
 </body>
